@@ -94,6 +94,16 @@ class FileDict(dict):
 
         return self[release]["status"] == "SUCCEEDED"
 
+    def is_in_progress(self, release=None):
+        """
+            检查release是否构建成功。
+        :param release:
+        :return:
+        """
+        # 'buildStatus': 'SUCCEEDED'|'FAILED'|'FAULT'|'TIMED_OUT'|'IN_PROGRESS'|'STOPPED',
+
+        return self[release]["status"] == "IN_PROGRESS"
+
     def is_need_rebuild(self, release=None):
         """
             是否需要重新构建

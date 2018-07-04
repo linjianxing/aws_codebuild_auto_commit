@@ -28,12 +28,10 @@ def auto_build():
 
     for release in releases:
         tag_name = release["tag_name"]
-        code_build_tag = "MainnetEOS-%s" % tag_name
-
 
         # 新建构建任务
         if tag_name not in db.keys():
-            build = builder.start_build(project=CodeBuild_Project, tag=code_build_tag)
+            build = builder.start_build(project=CodeBuild_Project, tag=tag_name)
             db.add_release(release=tag_name, build_id=build["build_id"])
             continue
 
@@ -45,13 +43,17 @@ def auto_build():
         db.update_release(release=tag_name, status=build["status"])
 
         # 修改构建成功的版本状态。
+        if db.is_in_progress(release=tag_name):
+            continue
+
+        # 修改构建成功的版本状态。
         if db.is_build_success(release=tag_name):
             db.update_release(release=tag_name, the_end=True)
             continue
 
         if db.is_need_rebuild(release=tag_name):
             print "Re build %s" % tag_name
-            build = builder.start_build(project=CodeBuild_Project, tag=code_build_tag)
+            build = builder.start_build(project=CodeBuild_Project, tag=tag_name)
             db.update_release(release=tag_name, build_id=build["build_id"], status=build["status"], add_rebuild=True)
             continue
 
