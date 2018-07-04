@@ -44,9 +44,10 @@ class CodeBuild(Aws):
         :param build_id:
         :return:
         """
-        builds = self._client.batch_get_builds(ids=[build_id])
+        result = self._client.batch_get_builds(ids=[build_id])
+        builds = result["builds"]
         assert len(builds) == 1, "No build be find ! %s" % build_id
         return {
-            "build_id": builds["builds"][0]["id"],
-            "status": builds["builds"][0]["buildStatus"]
+            "build_id": builds[0]["id"],
+            "status": builds[0]["buildStatus"]
         }
