@@ -9,7 +9,7 @@ from lib.github import EOS_MainnetGitHub
 from lib.dict_file_db import FileDict
 from aws.code_build import CodeBuild
 
-CodeBuild_Project = ""
+CodeBuild_Project = "build_eos_docker"
 
 
 # 'buildStatus': 'SUCCEEDED'|'FAILED'|'FAULT'|'TIMED_OUT'|'IN_PROGRESS'|'STOPPED',
@@ -30,14 +30,15 @@ def auto_build():
         tag_name = release["tag_name"]
         code_build_tag = "MainnetEOS-%s" % tag_name
 
-        # 跳过已结束版本
-        if db[tag_name]["the_end"]:
-            continue
 
         # 新建构建任务
         if tag_name not in db.keys():
             build = builder.start_build(project=CodeBuild_Project, tag=code_build_tag)
             db.add_release(release=tag_name, build_id=build["build_id"])
+            continue
+
+        # 跳过已结束版本
+        if db[tag_name]["the_end"]:
             continue
 
         # 检查是否构建成功
