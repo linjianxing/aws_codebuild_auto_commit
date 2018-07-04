@@ -5,30 +5,54 @@
 # QQ: 279370682
 # 2018/7/3 20:12
 
+import requests
+
 
 class GitHub(object):
     """
         github 操作类
     """
+    _owner = None
+    _repo = None
 
-    def __init__(self, user=None, repo=None):
-        self._user = user
-        self._repo = repo
+    def __init__(self):
+        pass
 
-    def get_latest_release_version(self):
+    def get_releases(self):
         """
             获取最新发布版本号
         :return:
         """
-        return None
+        ret = []
+        latest_release_api_url = "https://api.github.com/repos/%s/%s/releases" % (self._owner, self._repo)
+        result = requests.get(url=latest_release_api_url)
+        data = result.json()
+        for r in data:
+            ret.append(
+                {
+                    "tag_name": r["tag_name"],
+                    "create_time": r["create_time"]
+                }
+            )
+        return ret
+
+    def get_latest_release(self):
+        """
+            查询最新发布版本
+        """
+        releases = self.get_releases()
+        latest_release = releases[0]
+
+        for r in releases:
+            if r["create_time"] > latest_release["create_time"]:
+                latest_release = r
+
+        return latest_release
 
 
-def main():
-    """
-        main
-    :return: 
-    """
+class EOS_MainnetGitHub(GitHub):
+    _owner = "EOS-Mainnet"
+    _repo = "eos"
 
-
-if __name__ == '__main__':
-    main()
+    def __init__(self):
+        super(EOS_MainnetGitHub, self).__init__()

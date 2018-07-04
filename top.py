@@ -5,7 +5,7 @@
 # QQ: 279370682
 # 2018/7/3 20:04
 
-from lib.auto_build import auto_build
+from lib.main import auto_build
 
 
 def main():
@@ -13,7 +13,6 @@ def main():
         main
     :return: 
     """
-
     auto_build()
 
 
