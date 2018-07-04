@@ -72,12 +72,12 @@ class FileDict(dict):
         :param add_rebuild:
         :return:
         """
-        self[release][release]["build_id"] = build_id
-        self[release][release]["the_end"] = the_end
-        self[release][release]["status"] = status
+        print "Update release %s,%s,%s,%s,%s" % (release, build_id, status, add_rebuild, the_end)
+        self[release]["build_id"] = build_id
+        self[release]["the_end"] = the_end
+        self[release]["status"] = status
         if add_rebuild:
-            self[release][release]["rebuild"] += 1
-        print "Update release %s" % locals()
+            self[release]["rebuild"] += 1
         self.save()
 
     def is_build_success(self, release=None):
@@ -88,7 +88,7 @@ class FileDict(dict):
         """
         # 'buildStatus': 'SUCCEEDED'|'FAILED'|'FAULT'|'TIMED_OUT'|'IN_PROGRESS'|'STOPPED',
 
-        return self[release]["status"] != "SUCCEEDED"
+        return self[release]["status"] == "SUCCEEDED"
 
     def is_need_rebuild(self, release=None):
         """
