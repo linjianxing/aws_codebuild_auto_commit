@@ -31,8 +31,12 @@ class CodeBuild(Aws):
                                                'type': 'PLAINTEXT'
                                            },
                                        ])
-        print "Create new build %s，%s :%s" % (project, tag, ret)
-        return ret["build"]["id"]
+
+        print "Create new build %s，%s :%s" % (project, str(tag), str(ret))
+        return {
+            "build_id": ret["build"]["id"],
+            "status": ret["build"]["buildStatus"]
+        }
 
     def get_build_info(self, build_id=None):
         """
