@@ -41,13 +41,13 @@ def auto_build():
         if db[tag_name]["the_end"]:
             continue
 
-        # 检查是否构建成功
-        if db.is_build_success(release=tag_name):
-            continue
-
         build = builder.get_build_info(build_id=db[tag_name]["build_id"])
-
         db.update_release(release=tag_name, status=build["status"])
+
+        # 修改构建成功的版本状态。
+        if db.is_build_success(release=tag_name):
+            db.update_release(release=tag_name, the_end=True)
+            continue
 
         if db.is_need_rebuild(release=tag_name):
             print "Re build %s" % tag_name

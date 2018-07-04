@@ -73,11 +73,15 @@ class FileDict(dict):
         :return:
         """
         print "Update release %s,%s,%s,%s,%s" % (release, build_id, status, add_rebuild, the_end)
-        self[release]["build_id"] = build_id
-        self[release]["the_end"] = the_end
-        self[release]["status"] = status
+
+        if build_id is not None:
+            self[release]["build_id"] = build_id
+        if status is not None:
+            self[release]["status"] = status
         if add_rebuild:
             self[release]["rebuild"] += 1
+        self[release]["the_end"] = the_end
+
         self.save()
 
     def is_build_success(self, release=None):
