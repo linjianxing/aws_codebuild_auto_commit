@@ -12,10 +12,10 @@ class CodeBuild(Aws):
     """
         CodeBuild
     """
+    _resource = "codebuild"
 
     def __init__(self):
         super(CodeBuild, self).__init__()
-        self._client = self._session("codebuild")
 
     def start_build(self, project=None, tag=None):
         """

@@ -31,7 +31,7 @@ class GitHub(object):
             ret.append(
                 {
                     "tag_name": r["tag_name"],
-                    "create_time": r["create_time"]
+                    "created_at": r["created_at"]
                 }
             )
         return ret
@@ -44,7 +44,7 @@ class GitHub(object):
         latest_release = releases[0]
 
         for r in releases:
-            if r["create_time"] > latest_release["create_time"]:
+            if r["created_at"] > latest_release["created_at"]:
                 latest_release = r
 
         return latest_release

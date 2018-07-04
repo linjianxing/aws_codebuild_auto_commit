@@ -7,6 +7,7 @@ import boto3
 
 
 class Aws(object):
+    _resource = None
+
     def __init__(self):
-        self._session = boto3.Session()
-        self._client = None
+        self._client = boto3.client(self._resource)
